@@ -4,16 +4,51 @@ using UnityEngine;
 
 public class Pipe : MonoBehaviour {
 
-    public float curveRadius, pipeRadius; 
-    public int curveSegCount, pipeSegCount;
+    public float pipeRadius; 
+    public int pipeSegCount;
+    public float ringDistance;
+
+    public float minCurveRadius, maxCurveRadius;
+    public int minCurveSegCount, maxCurveSegCount;
+
+    float curveRadius;
+    int curveSegCount;
 
     Mesh mesh;
     Vector3[] verts;
     int[] triangles;
+    float curveAngle;
+    float relativeRotation;
+
+    #region properties
+    public float RelativeRotation{
+        get{
+            return relativeRotation;
+        }
+    }
+
+    public float CurveRadius{
+        get{
+            return curveRadius;
+        }
+    }
+
+    public float CurveAngle{
+        get{
+            return curveAngle;
+        }
+    }
+#endregion
 
     private void Awake(){
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-        mesh.name = "Pipe";
+        mesh.name = "Pipe"; 
+    }
+
+    public void Generate(){
+        curveRadius = Random.Range(minCurveRadius, maxCurveRadius);
+        curveSegCount = Random.Range(minCurveSegCount, maxCurveSegCount + 1);
+        mesh.Clear();
         SetVertices();
         SetTriangles();
         mesh.RecalculateNormals();
@@ -21,7 +56,9 @@ public class Pipe : MonoBehaviour {
 
     void SetVertices(){
         verts = new Vector3[pipeSegCount * curveSegCount * 4];
-        float uStep = (2f * Mathf.PI) / curveSegCount;
+
+        float uStep = ringDistance / curveRadius;
+        curveAngle = uStep * curveSegCount * (360f / (2f * Mathf.PI));
         CreateFirstQuadRing(uStep);
         int iDelta = pipeSegCount * 4;
         for (int u = 2, i = iDelta; u <= curveSegCount; u ++, i += iDelta){
@@ -30,12 +67,26 @@ public class Pipe : MonoBehaviour {
         mesh.vertices = verts;
     }
 
+    public void AlignWith(Pipe pipe)
+    {
+        relativeRotation = Random.Range(0, curveSegCount) * 360f / pipeSegCount; ;
+
+        transform.SetParent(pipe.transform, false);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(0f, 0f, -pipe.curveAngle);
+        transform.Translate(0f, pipe.curveRadius, 0f);
+        transform.Rotate(relativeRotation, 0f, 0f);
+        transform.Translate(0f, -curveRadius, 0f);
+        transform.SetParent(pipe.transform.parent);
+        transform.localScale = Vector3.one;
+    }
+
     void SetTriangles() {
         triangles = new int[pipeSegCount * curveSegCount * 6];
         for (int t = 0, i = 0; t < triangles.Length; t += 6, i += 4){
             triangles[t] = i;
-            triangles[t + 1] = triangles[t + 4] = i + 1;
-            triangles[t + 2] = triangles[t + 3] = i + 2;
+            triangles[t + 1] = triangles[t + 4] = i + 2;
+            triangles[t + 2] = triangles[t + 3] = i + 1;
             triangles[t + 5] = i + 3;
         }
         mesh.triangles = triangles;
@@ -92,19 +143,5 @@ public class Pipe : MonoBehaviour {
         return p;
     }
 
-    void OnDrawGizmos(){
-        float vStep = (2f * Mathf.PI) / pipeSegCount;
-        float uStep = (2f * Mathf.PI) / curveSegCount;
-
-        for (int u = 0; u < curveSegCount; u++){
-            for (int v = 0; v < pipeSegCount; v++){
-                Vector3 point = GetPointOnTorus(u * uStep, v * vStep);
-                Gizmos.color = new Color(
-                    1f,
-                (float)v / pipeSegCount,
-                (float)u / curveSegCount);
-                Gizmos.DrawSphere(point, 0.1f);
-            }
-        }
-    }
+    
 }
