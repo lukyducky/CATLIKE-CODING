@@ -5,17 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     public PipeSystem pipeSystem;
-    public float velocity;
+    public float velocity, rotationVelocity;
 
     Pipe currentPipe;
     float distanceTraveled;
     
-    float deltaToRotation, systemRotation, worldRotation;
-    Transform world;
+    float deltaToRotation, systemRotation, worldRotation, avatarRotation;
+    Transform world, rotater;
 
     private void Start()
     {
         world = pipeSystem.transform.parent;
+        rotater = transform.GetChild(0);
         currentPipe = pipeSystem.SetupFirstPipe();
         SetUpCurrentPipe();
 
@@ -37,6 +38,21 @@ public class Player : MonoBehaviour {
         }
 
         pipeSystem.transform.localRotation = Quaternion.Euler(0f, 0f, systemRotation);
+        UpdateAvatarRotation();
+    }
+
+    void UpdateAvatarRotation()
+    {
+        avatarRotation += rotationVelocity * Time.deltaTime * Input.GetAxis("Horizontal");
+        if (avatarRotation < 0f)
+        {
+            avatarRotation += 360f;
+        }
+        else if(avatarRotation >= 360f)
+        {
+            avatarRotation -= 360f;
+        }
+        rotater.localRotation = Quaternion.Euler(avatarRotation, 0f, 0f);
     }
 
     void SetUpCurrentPipe(){

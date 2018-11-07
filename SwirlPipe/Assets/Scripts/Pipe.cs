@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pipe : MonoBehaviour {
-
+    #region data
     public float pipeRadius; 
     public int pipeSegCount;
     public float ringDistance;
@@ -19,6 +19,9 @@ public class Pipe : MonoBehaviour {
     int[] triangles;
     float curveAngle;
     float relativeRotation;
+    Vector2[] uv;
+    #endregion
+
 
     #region properties
     public float RelativeRotation{
@@ -50,6 +53,7 @@ public class Pipe : MonoBehaviour {
         curveSegCount = Random.Range(minCurveSegCount, maxCurveSegCount + 1);
         mesh.Clear();
         SetVertices();
+        SetUV();
         SetTriangles();
         mesh.RecalculateNormals();
     }
@@ -65,6 +69,19 @@ public class Pipe : MonoBehaviour {
             CreateQuadRing(u * uStep, i);
         }
         mesh.vertices = verts;
+    }
+
+    void SetUV()
+    {
+        uv = new Vector2[verts.Length];
+        for (int i = 0; i <verts.Length; i += 4)
+        {
+            uv[i] = Vector2.zero;
+            uv[i + 1] = Vector2.right;
+            uv[i + 2] = Vector3.up;
+            uv[i + 3] = Vector2.one;
+        }
+        mesh.uv = uv;
     }
 
     public void AlignWith(Pipe pipe)
