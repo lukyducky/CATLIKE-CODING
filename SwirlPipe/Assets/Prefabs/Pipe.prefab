@@ -95,10 +95,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80cf2fc92175fa4c87110c1d01b8b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pipeRadius: 3
-  pipeSegCount: 15
-  ringDistance: 0.77
-  minCurveRadius: 5
-  maxCurveRadius: 20
+  pipeRadius: 1
+  pipeSegCount: 10
+  ringDistance: 1
+  minCurveRadius: 4
+  maxCurveRadius: 15
   minCurveSegCount: 4
   maxCurveSegCount: 10
+  generators:
+  - {fileID: 114669838254552878, guid: fefe4b06036c24f44bbab07314997ce5, type: 2}
+  - {fileID: 114748860711432086, guid: bf1747825f076cb4ea6d13ce0d1217d5, type: 2}
+  - {fileID: 114976612207874842, guid: 980731a53f3d5ca419deee67ae374e57, type: 2}
+  - {fileID: 114217496187116610, guid: 13102392ab5a95f4f9928827c7a390e6, type: 2}
+  - {fileID: 114217496187116610, guid: 13102392ab5a95f4f9928827c7a390e6, type: 2}
+  - {fileID: 114217496187116610, guid: 13102392ab5a95f4f9928827c7a390e6, type: 2}
+  - {fileID: 114669838254552878, guid: fefe4b06036c24f44bbab07314997ce5, type: 2}
+  - {fileID: 114009647630084412, guid: 2ddd0d2d214a57f4da908a0ea15a4ee4, type: 2}
+  - {fileID: 114384872466698114, guid: dbd022d3f0030f9458e265d768ca73f4, type: 2}

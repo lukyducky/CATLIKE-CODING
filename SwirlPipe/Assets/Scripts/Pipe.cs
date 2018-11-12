@@ -7,9 +7,12 @@ public class Pipe : MonoBehaviour {
     public float pipeRadius; 
     public int pipeSegCount;
     public float ringDistance;
+    
 
     public float minCurveRadius, maxCurveRadius;
     public int minCurveSegCount, maxCurveSegCount;
+
+    public PipeItemGenerator[] generators;
 
     float curveRadius;
     int curveSegCount;
@@ -41,6 +44,13 @@ public class Pipe : MonoBehaviour {
             return curveAngle;
         }
     }
+
+    public int CurveSegCount {
+        get {
+            return curveSegCount;
+        }
+    }
+
 #endregion
 
     private void Awake(){
@@ -48,7 +58,7 @@ public class Pipe : MonoBehaviour {
         mesh.name = "Pipe"; 
     }
 
-    public void Generate(){
+    public void Generate(bool withItems = true){
         curveRadius = Random.Range(minCurveRadius, maxCurveRadius);
         curveSegCount = Random.Range(minCurveSegCount, maxCurveSegCount + 1);
         mesh.Clear();
@@ -56,6 +66,13 @@ public class Pipe : MonoBehaviour {
         SetUV();
         SetTriangles();
         mesh.RecalculateNormals();
+        for (int i = 0; i < transform.childCount; i++){
+
+            Destroy(transform.GetChild(i).gameObject);
+        }
+        if (withItems){
+            generators[Random.Range(0, generators.Length)].GenerateItems(this);
+        }
     }
 
     void SetVertices(){

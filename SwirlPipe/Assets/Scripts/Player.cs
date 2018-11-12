@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+    #region data
 
     public PipeSystem pipeSystem;
-    public float velocity, rotationVelocity;
+    public float velocity, rotationVelocity, startVelocity;
+    public MainMenu mainMenu;
+    public float[] accelerations;
+    public HUD hud;
 
     Pipe currentPipe;
-    float distanceTraveled;
+    float distanceTraveled, acceleration;
     
     float deltaToRotation, systemRotation, worldRotation, avatarRotation;
     Transform world, rotater;
-
-    private void Start()
-    {
-        world = pipeSystem.transform.parent;
-        rotater = transform.GetChild(0);
-        currentPipe = pipeSystem.SetupFirstPipe();
-        SetUpCurrentPipe();
-
-    }
+#endregion
 
     private void Update()
     {
+        velocity += acceleration * Time.deltaTime;
         float delta = velocity * Time.deltaTime;
+        
         distanceTraveled += delta;
         systemRotation += delta * deltaToRotation;
 
@@ -39,6 +37,29 @@ public class Player : MonoBehaviour {
 
         pipeSystem.transform.localRotation = Quaternion.Euler(0f, 0f, systemRotation);
         UpdateAvatarRotation();
+
+        hud.SetValues(distanceTraveled, velocity);
+    }
+
+    private void Awake(){
+        world = pipeSystem.transform.parent;
+        rotater = transform.GetChild(0);
+        gameObject.SetActive(false);
+    }
+
+    public void StartGame(int accelMode){
+        distanceTraveled = 0f;
+        avatarRotation = 0f;
+        systemRotation = 0f;
+
+        acceleration = accelerations[accelMode];
+        velocity = startVelocity;
+
+        currentPipe = pipeSystem.SetupFirstPipe();
+        SetUpCurrentPipe();
+        gameObject.SetActive(true);
+
+        hud.SetValues(distanceTraveled, velocity);
     }
 
     void UpdateAvatarRotation()
@@ -66,4 +87,12 @@ public class Player : MonoBehaviour {
         }
         world.localRotation = Quaternion.Euler(worldRotation, 0f, 0f);
     }
+
+    public void Die(){
+        mainMenu.EndGame(distanceTraveled);
+        gameObject.SetActive(false);
+
+    }
+
+    
 }
