@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class GameDataWriter  {
+public class GameDataWriter {
     //not being attached to gameObject therefore, doesn't need monobehaviour
     //is a wrapper around Binary writer to make life easier for us
 
@@ -12,28 +12,31 @@ public class GameDataWriter  {
         this.writer = writer;
     }
 
-    public void Write (float value)
-    {
+    public void Write(float value) {
         writer.Write(value);
     }
 
-    public void Write (int val)
-    {
+    public void Write(int val) {
         writer.Write(val);
     }
 
-    public void Write (Quaternion value)
-    {
+    public void Write(Quaternion value) {
         writer.Write(value.x);
         writer.Write(value.y);
         writer.Write(value.z);
         writer.Write(value.w);
     }
 
-    public void Write (Vector3 value)
-    {
+    public void Write(Vector3 value) {
         writer.Write(value.x);
         writer.Write(value.y);
         writer.Write(value.z);
+    }
+
+    public void Write (Color val) {
+        writer.Write(val.r);
+        writer.Write(val.g);
+        writer.Write(val.b);
+        writer.Write(val.a);
     }
 }

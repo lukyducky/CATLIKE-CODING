@@ -210,8 +210,8 @@ Camera:
   m_GameObject: {fileID: 282840810}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.692, g: 0.40966398, b: 0.54674023, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295c8d0778860b04da4f4c091cd9ad3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 114246008600646666, guid: 490af08d36de2f04ead0d73b7775463c, type: 2}
+  shapeFactory: {fileID: 11400000, guid: b2490d746f4f0944f97b3e749388c6ed, type: 2}
   storage: {fileID: 1989371110}
   createKey: 99
   newGameKey: 110

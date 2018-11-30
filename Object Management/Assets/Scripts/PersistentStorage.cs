@@ -8,27 +8,23 @@ public class PersistentStorage : MonoBehaviour {
 
     string savePath;
 
-	void Awake()
-    {
+    void Awake() {
         savePath = Path.Combine(Application.persistentDataPath, "saveFile"); //from system.io; combine so that you get a file not just folder
 
     }
 
-    public void Save (PersistableObject obj)
-    {
-        using (
-            var writer = new BinaryWriter(File.Open(savePath, FileMode.Create)))
-        {
+    public void Save(PersistableObject obj, int vers) {
+        using(
+            var writer = new BinaryWriter(File.Open(savePath, FileMode.Create))) {
+            writer.Write(-vers);
             obj.Save(new GameDataWriter(writer));
         }
     }
 
-    public void Load (PersistableObject obj)
-    {
-        using ( 
-            var reader = new BinaryReader(File.Open(savePath, FileMode.Open)))
-        {
-            obj.Load(new GameDataReader(reader));
+    public void Load(PersistableObject obj) {
+        using(
+            var reader = new BinaryReader(File.Open(savePath, FileMode.Open))) {
+            obj.Load(new GameDataReader(reader, -reader.ReadInt32()));
         }
     }
 
