@@ -39,4 +39,14 @@ public class GameDataWriter {
         writer.Write(val.b);
         writer.Write(val.a);
     }
+
+    public void Write (Random.State value) {
+        //random.state is a struct.  it keeps track of where in random sequence we are.  
+        //So that we can recreate the randomly created shapes when reloading a scene
+        //Stores floats that are not directly accessible, but is serialzable so we use JSON.
+
+        Debug.Log(JsonUtility.ToJson(value));
+
+
+    }
 }
