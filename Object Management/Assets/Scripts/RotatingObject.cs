@@ -5,9 +5,14 @@ using UnityEngine;
 public class RotatingObject : PersistableObject {
     [SerializeField]
     Vector3 angularVelocity;
+    [SerializeField]
+    bool isRotating;
 
     private void FixedUpdate() {
-        transform.Rotate(angularVelocity * Time.deltaTime);
+        if(isRotating) {
+            transform.Rotate(angularVelocity * Time.deltaTime); 
+        }
+        
     }
 
 }

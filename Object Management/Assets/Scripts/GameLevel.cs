@@ -12,8 +12,8 @@ public class GameLevel : PersistableObject {
 
     public static GameLevel Current { get; private set;}
 
-    public Vector3 SpawnPoint {
-        get { return spawnZone.SpawnPoint; }
+    public void ConfigureSpawn(Shape inShape) {
+        spawnZone.ConfigureSpawn(inShape);
     }
 
     private void OnEnable() {
